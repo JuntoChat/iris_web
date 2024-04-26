@@ -2,7 +2,7 @@ import {
   FAKE_VIDEOINPUT_DEVICE_ID,
   FakeAgoraRTCWrapper,
   FakeLocalVideoTrack,
-} from '@agoraio-extensions/agora-rtc-sdk-ng-fake';
+} from '@kazm/agora-rtc-sdk-ng-fake';
 import * as NATIVE_RTC from '@iris/native-rtc';
 import 'jest-canvas-mock';
 
@@ -28,9 +28,8 @@ beforeEach(async () => {
   });
   jest.useFakeTimers();
   irisRtcEngine = apiEnginePtr['apiInterceptors'][0];
-  videoDeviceManagerImpl = irisRtcEngine.implDispatchesMap.get(
-    'VideoDeviceManager'
-  )._impl;
+  videoDeviceManagerImpl =
+    irisRtcEngine.implDispatchesMap.get('VideoDeviceManager')._impl;
   jest.spyOn(irisRtcEngine, 'returnResult');
 
   let nParam = {
@@ -87,9 +86,11 @@ describe('IAgoraRtcEngineImpl', () => {
     await callIris(apiEnginePtr, 'VideoDeviceManager_setDevice_4ad5f6e', param);
     expect(irisRtcEngine.globalState.videoDeviceId).toBe(param.deviceIdUTF8);
     expect(
-      (irisRtcEngine.irisClientManager.getLocalVideoTrackPackageBySourceType(
-        NATIVE_RTC.VIDEO_SOURCE_TYPE.VIDEO_SOURCE_CAMERA
-      )[0].track as ICameraVideoTrack).setDevice
+      (
+        irisRtcEngine.irisClientManager.getLocalVideoTrackPackageBySourceType(
+          NATIVE_RTC.VIDEO_SOURCE_TYPE.VIDEO_SOURCE_CAMERA
+        )[0].track as ICameraVideoTrack
+      ).setDevice
     ).toBeCalledWith(param.deviceIdUTF8);
   });
   test('getDevice_73b9872', async () => {

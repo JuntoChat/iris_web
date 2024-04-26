@@ -1,7 +1,7 @@
 ### VisualStudioCode template
 .vscode
 *.code-workspace
-
+.idea
 *.txt
 *.pcm
 **/coverage/*

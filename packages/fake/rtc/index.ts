@@ -1,4 +1,4 @@
-import { FakeAgoraRTCWrapper } from '@agoraio-extensions/agora-rtc-sdk-ng-fake';
+import { FakeAgoraRTCWrapper } from '@kazm/agora-rtc-sdk-ng-fake';
 import { ERROR_CODE_TYPE } from '@iris/native-rtc';
 
 import { AgoraConsole, IrisApiEngine, IrisRtcEngine } from 'iris-web-rtc';

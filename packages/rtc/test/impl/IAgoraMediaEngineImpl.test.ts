@@ -1,7 +1,7 @@
 import {
   FakeAgoraRTCWrapper,
   FakeLocalVideoTrack,
-} from '@agoraio-extensions/agora-rtc-sdk-ng-fake';
+} from '@kazm/agora-rtc-sdk-ng-fake';
 import * as NATIVE_RTC from '@iris/native-rtc';
 import 'jest-canvas-mock';
 

@@ -1143,6 +1143,99 @@ export class IRtcEngineImpl implements IRtcEngineExtensions {
 }
 
 //@ts-ignore
+export class IAudioDeviceManagerImpl implements NATIVE_RTC.IAudioDeviceManager {
+  private _engine: IrisRtcEngine;
+
+  public constructor(engine: IrisRtcEngine) {
+    this._engine = engine;
+  }
+
+  enumerateRecordingDevices(): CallApiReturnType {
+    let deviceList = [];
+    let process = async () => {
+      try {
+        deviceList = (await this._engine.implHelper.enumerateDevices())
+          ?.recordingDevices;
+      } catch (e) {
+        AgoraConsole.log(e);
+        return this._engine.returnResult(false);
+      }
+      return this._engine.returnResult(
+        true,
+        0,
+        JSON.stringify({ result: deviceList })
+      );
+    };
+    return this._engine.execute(process);
+  }
+
+  enumeratePlaybackDevices(): CallApiReturnType {
+    let deviceList = [];
+    let process = async () => {
+      try {
+        deviceList = (await this._engine.implHelper.enumerateDevices())
+          ?.playbackDevices;
+      } catch (e) {
+        AgoraConsole.log(e);
+        return this._engine.returnResult(false);
+      }
+      return this._engine.returnResult(
+        true,
+        0,
+        JSON.stringify({ result: deviceList })
+      );
+    };
+    return this._engine.execute(process);
+  }
+
+  setRecordingDevice_4ad5f6e(deviceIdUTF8: string): CallApiReturnType {
+    let process = async () => {
+      this._engine.globalState.recordingDeviceId = deviceIdUTF8;
+
+      for (let audioTrackPackage of this._engine.irisClientManager
+        .localAudioTrackPackages) {
+        if (audioTrackPackage.track) {
+          await this._engine.trackHelper.setRecordingDevice(
+            audioTrackPackage.track as IMicrophoneAudioTrack,
+            deviceIdUTF8
+          );
+        }
+      }
+
+      return this._engine.returnResult();
+    };
+    return this._engine.execute(process);
+  }
+  getRecordingDevice_73b9872(): CallApiReturnType {
+    let process = async () => {
+      let list: MediaDeviceInfo[] = [];
+      let deviceId = '';
+      if (this._engine.globalState.recordingDeviceId) {
+        deviceId = this._engine.globalState.recordingDeviceId;
+      } else {
+        try {
+          list = await this._engine.globalState.AgoraRTC.getMicrophones();
+        } catch (e) {
+          return this._engine.returnResult(false);
+        }
+        if (list && list.length > 0) {
+          deviceId = list[0].deviceId;
+        }
+      }
+      return this._engine.returnResult(
+        true,
+        0,
+        JSON.stringify({
+          result: NATIVE_RTC.ERROR_CODE_TYPE.ERR_OK,
+          deviceIdUTF8: deviceId,
+        })
+      );
+    };
+    return this._engine.execute(process);
+  }
+}
+
+//@ts-ignore
 export class IVideoDeviceManagerImpl implements NATIVE_RTC.IVideoDeviceManager {
   private _engine: IrisRtcEngine;
 

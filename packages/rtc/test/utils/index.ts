@@ -3,7 +3,7 @@ import {
   FakeLocalAudioTrack,
   FakeLocalVideoTrack,
   dispatchRTCEvent,
-} from '@agoraio-extensions/agora-rtc-sdk-ng-fake';
+} from '@kazm/agora-rtc-sdk-ng-fake';
 import {
   CHANNEL_PROFILE_TYPE,
   CLIENT_ROLE_TYPE,

@@ -1,7 +1,7 @@
 import {
   FAKE_CHANNEL_NAME,
   FakeAgoraRTCWrapper,
-} from '@agoraio-extensions/agora-rtc-sdk-ng-fake';
+} from '@kazm/agora-rtc-sdk-ng-fake';
 import * as NATIVE_RTC from '@iris/native-rtc';
 import { AREAS, IAgoraRTC, ILocalTrack } from 'agora-rtc-sdk-ng';
 
@@ -129,9 +129,10 @@ describe('IAgoraRtcEngineImpl', () => {
       },
     };
     await callIris(apiEnginePtr, 'RtcEngineEx_joinChannelEx_a3cd08c', param);
-    let agoraRTCClient = irisRtcEngine.irisClientManager.getIrisClientByConnection(
-      param.connection
-    ).agoraRTCClient;
+    let agoraRTCClient =
+      irisRtcEngine.irisClientManager.getIrisClientByConnection(
+        param.connection
+      ).agoraRTCClient;
     jest.spyOn(agoraRTCClient, 'renewToken');
     jest.spyOn(agoraRTCClient, 'setClientRole');
     let param2 = {
@@ -200,12 +201,12 @@ describe('IAgoraRtcEngineImpl', () => {
   test('muteLocalAudioStreamEx_3cf17a4', async () => {
     let connection = await joinChannelEx(apiEnginePtr);
     await callIris(apiEnginePtr, 'RtcEngine_enableAudio', null);
-    let irisClient = irisRtcEngine.irisClientManager.getIrisClientByConnection(
-      connection
-    );
-    let localAudioTrackPackage = irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
-      IrisAudioSourceType.kAudioSourceTypeMicrophonePrimary
-    );
+    let irisClient =
+      irisRtcEngine.irisClientManager.getIrisClientByConnection(connection);
+    let localAudioTrackPackage =
+      irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
+        IrisAudioSourceType.kAudioSourceTypeMicrophonePrimary
+      );
     expect(localAudioTrackPackage.length).toBe(1);
     expect(localAudioTrackPackage[0].track.isPlaying).toBe(true);
     expect((localAudioTrackPackage[0].track as ILocalTrack).muted).toBe(false);
@@ -225,9 +226,8 @@ describe('IAgoraRtcEngineImpl', () => {
   test('muteAllRemoteAudioStreamsEx_3cf17a4', async () => {
     let connection = await joinChannelEx(apiEnginePtr);
     await callIris(apiEnginePtr, 'RtcEngine_enableAudio', null);
-    let irisClient = irisRtcEngine.irisClientManager.getIrisClientByConnection(
-      connection
-    );
+    let irisClient =
+      irisRtcEngine.irisClientManager.getIrisClientByConnection(connection);
     let remoteUsers = irisClient.agoraRTCClient.remoteUsers;
     expect(remoteUsers[0].audioTrack.isPlaying).toBe(true);
 
@@ -253,9 +253,8 @@ describe('IAgoraRtcEngineImpl', () => {
   test('muteRemoteAudioStreamEx_6d93082', async () => {
     let connection = await joinChannelEx(apiEnginePtr);
     await callIris(apiEnginePtr, 'RtcEngine_enableAudio', null);
-    let irisClient = irisRtcEngine.irisClientManager.getIrisClientByConnection(
-      connection
-    );
+    let irisClient =
+      irisRtcEngine.irisClientManager.getIrisClientByConnection(connection);
     let remoteUsers = irisClient.agoraRTCClient.remoteUsers;
     expect(remoteUsers[0].audioTrack.isPlaying).toBe(true);
 
@@ -285,9 +284,10 @@ describe('IAgoraRtcEngineImpl', () => {
     await callIris(apiEnginePtr, 'RtcEngine_enableVideo', null);
     await callIris(apiEnginePtr, 'RtcEngine_startPreview', null);
     let connection = await joinChannelEx(apiEnginePtr);
-    let localVideoTrackPackage = irisRtcEngine.irisClientManager.getLocalVideoTrackPackageBySourceType(
-      NATIVE_RTC.VIDEO_SOURCE_TYPE.VIDEO_SOURCE_CAMERA_PRIMARY
-    );
+    let localVideoTrackPackage =
+      irisRtcEngine.irisClientManager.getLocalVideoTrackPackageBySourceType(
+        NATIVE_RTC.VIDEO_SOURCE_TYPE.VIDEO_SOURCE_CAMERA_PRIMARY
+      );
     expect(localVideoTrackPackage.length).toBe(1);
     expect(localVideoTrackPackage[0].track.isPlaying).toBe(true);
     expect((localVideoTrackPackage[0].track as ILocalTrack).muted).toBe(false);
@@ -308,9 +308,8 @@ describe('IAgoraRtcEngineImpl', () => {
     await callIris(apiEnginePtr, 'RtcEngine_enableVideo', null);
     let connection = await joinChannelEx(apiEnginePtr);
     await setupRemoteVideoEx(apiEnginePtr, null);
-    let irisClient = irisRtcEngine.irisClientManager.getIrisClientByConnection(
-      connection
-    );
+    let irisClient =
+      irisRtcEngine.irisClientManager.getIrisClientByConnection(connection);
     let remoteUsers = irisClient.agoraRTCClient.remoteUsers;
     expect(remoteUsers[0].videoTrack.isPlaying).toBe(true);
 
@@ -337,9 +336,8 @@ describe('IAgoraRtcEngineImpl', () => {
     await callIris(apiEnginePtr, 'RtcEngine_enableVideo', null);
     let connection = await joinChannelEx(apiEnginePtr);
     await setupRemoteVideoEx(apiEnginePtr, null);
-    let irisClient = irisRtcEngine.irisClientManager.getIrisClientByConnection(
-      connection
-    );
+    let irisClient =
+      irisRtcEngine.irisClientManager.getIrisClientByConnection(connection);
     let remoteUsers = irisClient.agoraRTCClient.remoteUsers;
     expect(remoteUsers[0].videoTrack.isPlaying).toBe(true);
 
@@ -374,9 +372,8 @@ describe('IAgoraRtcEngineImpl', () => {
         ordered: true,
       },
     });
-    let irisClient = irisRtcEngine.irisClientManager.getIrisClientByConnection(
-      connection
-    );
+    let irisClient =
+      irisRtcEngine.irisClientManager.getIrisClientByConnection(connection);
     let irisClientState = irisClient.irisClientState;
     expect(irisClientState.dataStreamConfig.syncWithAudio).toBe(true);
     expect(irisClientState.dataStreamConfig.ordered).toBe(true);

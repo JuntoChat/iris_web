@@ -71,6 +71,8 @@ export class IrisGlobalState {
 
   //setDevice() : videoDevice
   videoDeviceId: string = null;
+  recordingDeviceId: string = null;
+  playbackDeviceId: string = null;
 
   //enableAudioVolumeIndication
   enableAudioVolumeIndication: boolean = false;

@@ -78,8 +78,11 @@ export class IrisClientObserver {
     let globalState = this._engine.globalState;
     for (let irisClient of irisClientList) {
       let options = irisClient.irisClientState;
+      console.log('Global State');
+      console.log(globalState);
       if (globalState.enabledAudio && globalState.enabledLocalAudio) {
         if (options.publishMicrophoneTrack) {
+          console.log('Publishing microphone audio');
           if (
             trackPackage.track &&
             (trackPackage.type ===
@@ -170,6 +173,7 @@ export class IrisClientObserver {
           }
         }
         if (options.publishCameraTrack) {
+          console.log('Publishing camera track');
           if (
             trackPackage.track &&
             trackPackage.type ===

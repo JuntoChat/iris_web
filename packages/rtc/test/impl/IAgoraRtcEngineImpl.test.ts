@@ -1,7 +1,7 @@
 import {
   FAKE_CHANNEL_NAME,
   FakeAgoraRTCWrapper,
-} from '@agoraio-extensions/agora-rtc-sdk-ng-fake';
+} from '@kazm/agora-rtc-sdk-ng-fake';
 import * as NATIVE_RTC from '@iris/native-rtc';
 import {
   AREAS,
@@ -304,8 +304,8 @@ describe('IAgoraRtcEngineImpl', () => {
 
   test('updateChannelMediaOptions_7bfc1d7', async () => {
     await joinChannel(apiEnginePtr, null);
-    let agoraRTCClient = irisRtcEngine.irisClientManager.getIrisClient()
-      .agoraRTCClient;
+    let agoraRTCClient =
+      irisRtcEngine.irisClientManager.getIrisClient().agoraRTCClient;
     jest.spyOn(agoraRTCClient, 'renewToken');
     jest.spyOn(agoraRTCClient, 'setClientRole');
     let param = {
@@ -383,8 +383,8 @@ describe('IAgoraRtcEngineImpl', () => {
     jest.spyOn(rtcEngineImpl, 'stopAllEffects');
     jest.spyOn(irisRtcEngine.irisClientManager.getIrisClient(), 'release');
     await joinChannel(apiEnginePtr, null);
-    let agoraRTCClient = irisRtcEngine.irisClientManager.getIrisClient()
-      .agoraRTCClient;
+    let agoraRTCClient =
+      irisRtcEngine.irisClientManager.getIrisClient().agoraRTCClient;
     jest.spyOn(irisRtcEngine.rtcEngineEventHandler, 'onUserOffline_0a32aac');
     jest.spyOn(irisRtcEngine.rtcEngineEventHandler, 'onLeaveChannel_c8e730d');
     await callIris(apiEnginePtr, 'RtcEngine_leaveChannel_2c0e3aa', param);
@@ -719,24 +719,32 @@ describe('IAgoraRtcEngineImpl', () => {
       ).length
     ).toBe(1);
     expect(
-      (irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
-        IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
-      )[0] as BufferSourceAudioTrackPackage).needPublish
+      (
+        irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
+          IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
+        )[0] as BufferSourceAudioTrackPackage
+      ).needPublish
     ).toBe(param.publish);
     expect(
-      (irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
-        IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
-      )[0] as BufferSourceAudioTrackPackage).soundId
+      (
+        irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
+          IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
+        )[0] as BufferSourceAudioTrackPackage
+      ).soundId
     ).toBe(param.soundId);
     expect(
-      (irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
-        IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
-      )[0] as BufferSourceAudioTrackPackage).track.getVolumeLevel()
+      (
+        irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
+          IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
+        )[0] as BufferSourceAudioTrackPackage
+      ).track.getVolumeLevel()
     ).toBe(param.gain / 100);
     expect(
-      (irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
-        IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
-      )[0] as BufferSourceAudioTrackPackage).track.isPlaying
+      (
+        irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
+          IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
+        )[0] as BufferSourceAudioTrackPackage
+      ).track.isPlaying
     ).toBeTruthy();
   });
   test('stopEffect', async () => {
@@ -797,9 +805,10 @@ describe('IAgoraRtcEngineImpl', () => {
     };
     await callIris(apiEnginePtr, 'RtcEngine_playEffect_531a783', param);
     await callIris(apiEnginePtr, 'RtcEngine_playEffect_531a783', param2);
-    let bufferSourceAudioTrackPackageListLength = irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
-      IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
-    ).length;
+    let bufferSourceAudioTrackPackageListLength =
+      irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
+        IrisAudioSourceType.kAudioSourceTypeBufferSourceAudio
+      ).length;
     expect(bufferSourceAudioTrackPackageListLength).toBe(2);
     await callIris(apiEnginePtr, 'RtcEngine_stopAllEffects', param2);
     expect(rtcEngineImpl.stopEffect_46f8ab7).toBeCalledTimes(
@@ -819,9 +828,10 @@ describe('IAgoraRtcEngineImpl', () => {
     jest.spyOn(rtcEngineImpl, 'muteLocalAudioStream_5039d15');
     await joinChannel(apiEnginePtr, null);
     await callIris(apiEnginePtr, 'RtcEngine_enableAudio', null);
-    let localAudioTrackPackage = irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
-      IrisAudioSourceType.kAudioSourceTypeMicrophonePrimary
-    );
+    let localAudioTrackPackage =
+      irisRtcEngine.irisClientManager.getLocalAudioTrackPackageBySourceType(
+        IrisAudioSourceType.kAudioSourceTypeMicrophonePrimary
+      );
     expect(localAudioTrackPackage.length).toBe(1);
     expect(localAudioTrackPackage[0].track.isPlaying).toBe(true);
     expect((localAudioTrackPackage[0].track as ILocalTrack).muted).toBe(false);
@@ -888,9 +898,10 @@ describe('IAgoraRtcEngineImpl', () => {
     await joinChannel(apiEnginePtr, null);
     await callIris(apiEnginePtr, 'RtcEngine_enableVideo', null);
     await callIris(apiEnginePtr, 'RtcEngine_startPreview', null);
-    let localVideoTrackPackage = irisRtcEngine.irisClientManager.getLocalVideoTrackPackageBySourceType(
-      NATIVE_RTC.VIDEO_SOURCE_TYPE.VIDEO_SOURCE_CAMERA_PRIMARY
-    );
+    let localVideoTrackPackage =
+      irisRtcEngine.irisClientManager.getLocalVideoTrackPackageBySourceType(
+        NATIVE_RTC.VIDEO_SOURCE_TYPE.VIDEO_SOURCE_CAMERA_PRIMARY
+      );
     expect(localVideoTrackPackage.length).toBe(1);
     expect(localVideoTrackPackage[0].track.isPlaying).toBe(true);
     expect((localVideoTrackPackage[0].track as ILocalTrack).muted).toBe(false);
