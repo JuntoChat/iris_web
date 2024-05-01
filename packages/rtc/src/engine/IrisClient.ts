@@ -221,12 +221,21 @@ export class IrisClient {
   }
 
   removeLocalAudioTrack(trackPackage: AudioTrackPackage) {
+    console.log('Removing audio track');
+    console.log(trackPackage);
     for (let i = 0; i < this.audioTrackPackages.length; i++) {
       let _trackPackage = this.audioTrackPackages[i];
+
+      console.log('Comparing track packages');
+      console.log(_trackPackage);
+      console.log(trackPackage);
       if (_trackPackage.track == trackPackage.track) {
+        console.log('Track removed');
         this.audioTrackPackages.splice(i, 1);
         i--;
         break;
+      } else {
+        console.log('Track not found');
       }
     }
   }

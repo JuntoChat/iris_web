@@ -40,10 +40,9 @@ export class ImplHelper {
     let bufferSourceAudioTrack: IBufferSourceAudioTrack = null;
 
     try {
-      bufferSourceAudioTrack =
-        await this._engine.globalState.AgoraRTC.createBufferSourceAudioTrack(
-          bufferSourceAudioTrackInitConfig
-        );
+      bufferSourceAudioTrack = await this._engine.globalState.AgoraRTC.createBufferSourceAudioTrack(
+        bufferSourceAudioTrackInitConfig
+      );
     } catch (e) {
       AgoraConsole.error('createBufferSourceAudioTrack failed');
       AgoraConsole.error(e);
@@ -75,10 +74,9 @@ export class ImplHelper {
     videoType: NATIVE_RTC.VIDEO_SOURCE_TYPE.VIDEO_SOURCE_CUSTOM,
     mediaStreamTrack: MediaStreamTrack
   ): Promise<VideoTrackPackage> {
-    let videoTrackPackage: VideoTrackPackage =
-      this._engine.irisClientManager.getLocalVideoTrackPackageBySourceType(
-        videoType
-      )[0];
+    let videoTrackPackage: VideoTrackPackage = this._engine.irisClientManager.getLocalVideoTrackPackageBySourceType(
+      videoType
+    )[0];
     let videoTrack: ILocalVideoTrack = null;
     let config = {
       mediaStreamTrack,
@@ -90,8 +88,9 @@ export class ImplHelper {
     }
     //如果没有track，但是有package，就需要创建track
     try {
-      videoTrack =
-        this._engine.globalState.AgoraRTC.createCustomVideoTrack(config);
+      videoTrack = this._engine.globalState.AgoraRTC.createCustomVideoTrack(
+        config
+      );
     } catch (e) {
       AgoraConsole.error('createCustomVideoTrack failed');
       AgoraConsole.error(e);
@@ -122,10 +121,9 @@ export class ImplHelper {
     captureParams: NATIVE_RTC.ScreenCaptureParameters2,
     videoType: NATIVE_RTC.VIDEO_SOURCE_TYPE
   ) {
-    let videoTrackPackage: VideoTrackPackage =
-      this._engine.irisClientManager.getLocalVideoTrackPackageBySourceType(
-        videoType
-      )[0];
+    let videoTrackPackage: VideoTrackPackage = this._engine.irisClientManager.getLocalVideoTrackPackageBySourceType(
+      videoType
+    )[0];
 
     //如果已经有track了，就不需要再创建了
     if (videoTrackPackage?.track) {
@@ -136,13 +134,11 @@ export class ImplHelper {
     let videoTrack: ILocalVideoTrack = null;
     let screenTrack = [null, null];
     try {
-      let conf: ScreenVideoTrackInitConfig =
-        this.generateScreenVideoTrackInitConfig();
-      let result =
-        await this._engine.globalState.AgoraRTC.createScreenVideoTrack(
-          conf,
-          captureParams.captureAudio ? 'auto' : 'disable'
-        );
+      let conf: ScreenVideoTrackInitConfig = this.generateScreenVideoTrackInitConfig();
+      let result = await this._engine.globalState.AgoraRTC.createScreenVideoTrack(
+        conf,
+        captureParams.captureAudio ? 'auto' : 'disable'
+      );
       if (Array.isArray(result)) {
         screenTrack = result;
       } else {
@@ -179,15 +175,14 @@ export class ImplHelper {
           }
 
           //设置屏幕共享特殊的事件
-          let trackEventHandler: IrisTrackEventHandler =
-            new IrisTrackEventHandler(
-              {
-                track: videoTrack,
-                videoSourceType: videoType,
-                trackType: 'ILocalTrack',
-              },
-              this._engine
-            );
+          let trackEventHandler: IrisTrackEventHandler = new IrisTrackEventHandler(
+            {
+              track: videoTrack,
+              videoSourceType: videoType,
+              trackType: 'ILocalTrack',
+            },
+            this._engine
+          );
           this._engine.irisClientManager.addTrackEventHandler(
             trackEventHandler
           );
@@ -202,8 +197,7 @@ export class ImplHelper {
     let audioTrackPackage: AudioTrackPackage;
     let audioTrack: IMicrophoneAudioTrack = null;
     try {
-      audioTrack =
-        await this._engine.globalState.AgoraRTC.createMicrophoneAudioTrack();
+      audioTrack = await this._engine.globalState.AgoraRTC.createMicrophoneAudioTrack();
       //受全局enabledAudio控制
       await this._engine.trackHelper.setEnabled(audioTrack, false);
     } catch (e) {
@@ -220,8 +214,7 @@ export class ImplHelper {
   public async createVideoCameraTrack(): Promise<ICameraVideoTrack> {
     let videoTrack: ICameraVideoTrack = null;
     try {
-      videoTrack =
-        await this._engine.globalState.AgoraRTC.createCameraVideoTrack();
+      videoTrack = await this._engine.globalState.AgoraRTC.createCameraVideoTrack();
       //受全局enabledVideo控制
       await this._engine.trackHelper.setEnabled(videoTrack, false);
     } catch (e) {
@@ -294,17 +287,15 @@ export class ImplHelper {
       globalState.screenCaptureContentHint !=
         NATIVE_RTC.VIDEO_CONTENT_HINT.CONTENT_HINT_NONE
     ) {
-      conf.optimizationMode =
-        AgoraTranslate.NATIVE_RTCVIDEO_CONTENT_HINT2string(
-          globalState.screenCaptureContentHint
-        );
+      conf.optimizationMode = AgoraTranslate.NATIVE_RTCVIDEO_CONTENT_HINT2string(
+        globalState.screenCaptureContentHint
+      );
     }
 
     if (globalState.screenCaptureParameters2 != null) {
-      conf.encoderConfig =
-        AgoraTranslate.NATIVE_RTCScreenCaptureParameters2VideoEncoderConfiguration(
-          globalState.screenCaptureParameters2
-        );
+      conf.encoderConfig = AgoraTranslate.NATIVE_RTCScreenCaptureParameters2VideoEncoderConfiguration(
+        globalState.screenCaptureParameters2
+      );
     }
     return conf;
   }
@@ -365,13 +356,20 @@ export class ImplHelper {
     let audioTrackPackages = irisClient.audioTrackPackages;
     let videoTrackPackage = irisClient.videoTrackPackage;
     let irisClientObserver = irisClientManager.irisClientObserver;
-    console.log('Unpublishing tracks');
-    console.log([...audioTrackPackages, videoTrackPackage]);
 
-    irisClientObserver.notifyLocal(NotifyType.UNPUBLISH_TRACK, [
-      ...audioTrackPackages,
-      videoTrackPackage,
-    ]);
+    if (options.publishCameraTrack !== undefined) {
+      console.log('Unpublishing tracks');
+      console.log([videoTrackPackage]);
+      irisClientObserver.notifyLocal(NotifyType.UNPUBLISH_TRACK, [
+        videoTrackPackage,
+      ]);
+    } else if (options.publishMicrophoneTrack !== undefined) {
+      console.log('Unpublishing tracks');
+      console.log([...audioTrackPackages]);
+      irisClientObserver.notifyLocal(NotifyType.UNPUBLISH_TRACK, [
+        ...audioTrackPackages,
+      ]);
+    }
 
     let irisClientState = irisClient.irisClientState;
     irisClientState.mergeChannelMediaOptions(options);
@@ -389,19 +387,28 @@ export class ImplHelper {
         return this._engine.returnResult(false);
       }
     }
-    console.log('Publishing tracks');
     console.log([
       ...irisClientManager.localAudioTrackPackages,
       ...irisClientManager.localVideoTrackPackages,
     ]);
-    irisClientObserver.notifyLocal(
-      NotifyType.PUBLISH_TRACK,
-      [
-        ...irisClientManager.localAudioTrackPackages,
-        ...irisClientManager.localVideoTrackPackages,
-      ],
-      [irisClient]
-    );
+
+    if (options.publishCameraTrack !== undefined) {
+      console.log('Publishing tracks');
+      console.log([...irisClientManager.localVideoTrackPackages]);
+      irisClientObserver.notifyLocal(
+        NotifyType.PUBLISH_TRACK,
+        [...irisClientManager.localVideoTrackPackages],
+        [irisClient]
+      );
+    } else if (options.publishMicrophoneTrack !== undefined) {
+      console.log('Publishing tracks');
+      console.log([...irisClientManager.localAudioTrackPackages]);
+      irisClientObserver.notifyLocal(
+        NotifyType.PUBLISH_TRACK,
+        [...irisClientManager.localAudioTrackPackages],
+        [irisClient]
+      );
+    }
   }
 
   public async joinChannel(
